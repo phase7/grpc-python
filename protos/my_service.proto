@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package myservice;
+
+service ItemService {
+  // Create an item
+  rpc CreateItem (Item) returns (Item) {}
+  
+  // Retrieve an item
+  rpc GetItem (ItemId) returns (Item) {}
+
+  // Update an item
+  rpc UpdateItem (Item) returns (Item) {}
+
+  // Delete an item
+  rpc DeleteItem (ItemId) returns (Item) {}
+}
+
+// Item definition
+message Item {
+  string id = 1;
+  string name = 2;
+}
+
+// Item ID
+message ItemId {
+  string id = 1;
+}
