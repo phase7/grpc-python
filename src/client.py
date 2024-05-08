@@ -1,16 +1,12 @@
 import grpc
-import my_service_pb2
-import my_service_pb2_grpc
-import typer
+import simple_service_pb2
+import simple_service_pb2_grpc
 
-def get_item(item_id: str):
+def run_grpc_client():
     with grpc.insecure_channel('localhost:50051') as channel:
-        stub = my_service_pb2_grpc.ItemServiceStub(channel)
-        response = stub.GetItem(my_service_pb2.ItemId(id=item_id))
-        if response.id:
-            print(f"Retrieved item: {response.name}")
-        else:
-            print("Item not found.")
+        stub = simple_service_pb2_grpc.GreetingServiceStub(channel)
+        response = stub.SayHello(simple_service_pb2.HelloRequest(name='Alice'))
+        print("gRPC client received: " + response.message)
 
-if __name__ == '__main__':
-    typer.run(get_item)
+# Uncomment the following line when running the script
+# run_grpc_client()
