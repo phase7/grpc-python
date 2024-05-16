@@ -8,11 +8,28 @@ ITER_NUMBER = 1000
 
 
 def calculate_transfer_rate(total_bytes, total_time_seconds):
-    # Transfer rate in bytes per second
+    """
+    Calculates the transfer rate in bytes per second.
+
+    Args:
+        total_bytes (int): The total number of bytes transferred.
+        total_time_seconds (float): The total time taken for the transfer in seconds.
+
+    Returns:
+        float: The transfer rate in bytes per second.
+    """
     return total_bytes / total_time_seconds
 
 
 def run(iterations: int = ITER_NUMBER):
+    """
+    Runs a series of HTTP requests to create, get, update, and delete items.
+
+    Args:
+        iterations (int): The number of iterations to perform for each request. 
+                          Default is ITER_NUMBER.
+    """
+
     base_url = 'http://localhost:5000/item'
 
     total_bytes_transferred = 0
@@ -22,8 +39,10 @@ def run(iterations: int = ITER_NUMBER):
     total_create_time = 0
     for i in range(iterations):
         start = time.time()
-        response = requests.post(base_url, json={'name': f'Item{
-                                 i}', 'description': f'Description{i}'}, timeout=200)
+        response = requests.post(base_url,
+                                 json={'name': f'Item{i}',
+                                       'description': f'Description{i}'},
+                                 timeout=200)
         end = time.time()
 
         total_create_time += (end - start)

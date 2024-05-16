@@ -10,6 +10,21 @@ ITER_NUMBER = 10000
 
 
 def benchmark_operation(stub, operation, *args, iterations=ITER_NUMBER):
+    """
+    Perform benchmarking for a given operation.
+
+    Args:
+        stub: The gRPC stub object.
+        operation: The operation to be benchmarked.
+        *args: Variable length argument list for the operation.
+        iterations: Number of iterations to run the benchmark (default: ITER_NUMBER).
+
+    Returns:
+        Tuple containing the average time taken per iteration (in milliseconds),
+        average request bytes, average response bytes, total request and response bytes,
+        and total time taken for all iterations.
+
+    """
     start_time = time.monotonic()
     total_request_bytes = 0
     total_response_bytes = 0
@@ -24,10 +39,25 @@ def benchmark_operation(stub, operation, *args, iterations=ITER_NUMBER):
     avg_request_bytes = total_request_bytes / iterations
     avg_response_bytes = total_response_bytes / iterations
 
-    return avg_time, avg_request_bytes, avg_response_bytes, total_request_bytes + total_response_bytes, (end_time - start_time)
+    return (
+        avg_time, avg_request_bytes,
+        avg_response_bytes,
+        total_request_bytes + total_response_bytes,
+        (end_time - start_time)
+    )
 
 
 def create_item(stub, item):
+    """
+    Creates an item using the provided stub and item object.
+
+    Args:
+        stub: The gRPC stub used to make the request.
+        item: The item object to be created.
+
+    Returns:
+        A tuple containing the length of the request bytes and the length of the response bytes.
+    """
     request_bytes = item.SerializeToString()
     response = stub.CreateItem(item)
     response_bytes = response.SerializeToString()
@@ -35,6 +65,16 @@ def create_item(stub, item):
 
 
 def get_item(stub, item_id):
+    """
+    Retrieves an item from the server using the provided stub and item ID.
+
+    Args:
+        stub: The gRPC stub used to make the request.
+        item_id: The ID of the item to retrieve.
+
+    Returns:
+        A tuple containing the length of the request bytes and the length of the response bytes.
+    """
     request_bytes = item_id.SerializeToString()
     response = stub.GetItem(item_id)
     response_bytes = response.SerializeToString()
@@ -42,6 +82,16 @@ def get_item(stub, item_id):
 
 
 def update_item(stub, item):
+    """
+    Updates an item using the provided gRPC stub.
+
+    Args:
+        stub: The gRPC stub used to make the update request.
+        item: The item to be updated.
+
+    Returns:
+        A tuple containing the length of the request bytes and the length of the response bytes.
+    """
     request_bytes = item.SerializeToString()
     response = stub.UpdateItem(item)
     response_bytes = response.SerializeToString()
@@ -49,6 +99,16 @@ def update_item(stub, item):
 
 
 def delete_item(stub, item_id):
+    """
+    Deletes an item using the provided stub and item_id.
+
+    Args:
+        stub: The gRPC stub used to make the delete request.
+        item_id: The ID of the item to be deleted.
+
+    Returns:
+        A tuple containing the length of the request bytes and the length of the response bytes.
+    """
     request_bytes = item_id.SerializeToString()
     response = stub.DeleteItem(item_id)
     response_bytes = response.SerializeToString()
@@ -56,6 +116,16 @@ def delete_item(stub, item_id):
 
 
 def run(iterations: int = ITER_NUMBER):
+    """
+    Runs the benchmarking process for the gRPC client.
+
+    Args:
+        iterations (int): The number of iterations to run for each operation. Defaults to ITER_NUMBER.
+
+    Returns:
+        None
+    """
+
     channel = grpc.insecure_channel('localhost:50051')
     stub = my_service_pb2_grpc.ItemServiceStub(channel)
 
