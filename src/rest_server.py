@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 items = {}
-next_id : int = 1
+next_id : int = 0
 
 
 @app.route('/item', methods=['POST'])
@@ -41,4 +41,4 @@ def delete_item(item_id):
 
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(port=5000, debug=True)
