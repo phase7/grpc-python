@@ -1,10 +1,13 @@
-import grpc
 import time
-import my_service_pb2
-import my_service_pb2_grpc
+
+import grpc
 import typer
 
+import my_service_pb2
+import my_service_pb2_grpc
+
 ITER_NUMBER = 10000
+
 
 def benchmark_operation(stub, operation, *args, iterations=ITER_NUMBER):
     start_time = time.monotonic()
@@ -23,11 +26,13 @@ def benchmark_operation(stub, operation, *args, iterations=ITER_NUMBER):
 
     return avg_time, avg_request_bytes, avg_response_bytes, total_request_bytes + total_response_bytes, (end_time - start_time)
 
+
 def create_item(stub, item):
     request_bytes = item.SerializeToString()
     response = stub.CreateItem(item)
     response_bytes = response.SerializeToString()
     return len(request_bytes), len(response_bytes)
+
 
 def get_item(stub, item_id):
     request_bytes = item_id.SerializeToString()
@@ -35,11 +40,13 @@ def get_item(stub, item_id):
     response_bytes = response.SerializeToString()
     return len(request_bytes), len(response_bytes)
 
+
 def update_item(stub, item):
     request_bytes = item.SerializeToString()
     response = stub.UpdateItem(item)
     response_bytes = response.SerializeToString()
     return len(request_bytes), len(response_bytes)
+
 
 def delete_item(stub, item_id):
     request_bytes = item_id.SerializeToString()
@@ -47,7 +54,8 @@ def delete_item(stub, item_id):
     response_bytes = response.SerializeToString()
     return len(request_bytes), len(response_bytes)
 
-def run(iterations: int=ITER_NUMBER):
+
+def run(iterations: int = ITER_NUMBER):
     channel = grpc.insecure_channel('localhost:50051')
     stub = my_service_pb2_grpc.ItemServiceStub(channel)
 
@@ -56,21 +64,24 @@ def run(iterations: int=ITER_NUMBER):
 
     # Create an item
     item = my_service_pb2.Item(id='1', name='Item 1')
-    avg_create_time, _, _, create_bytes_transferred, create_time_spent = benchmark_operation(stub, create_item, item, iterations=iterations)
+    avg_create_time, _, _, create_bytes_transferred, create_time_spent = benchmark_operation(
+        stub, create_item, item, iterations=iterations)
     total_bytes_transferred += create_bytes_transferred
     total_time_spent += create_time_spent
     print(f"Average CreateItem Time: {avg_create_time} milliseconds")
 
     # Get the item
     item_id = my_service_pb2.ItemId(id='1')
-    avg_get_time, _, _, get_bytes_transferred, get_time_spent = benchmark_operation(stub, get_item, item_id, iterations=iterations)
+    avg_get_time, _, _, get_bytes_transferred, get_time_spent = benchmark_operation(
+        stub, get_item, item_id, iterations=iterations)
     total_bytes_transferred += get_bytes_transferred
     total_time_spent += get_time_spent
     print(f"Average GetItem Time: {avg_get_time} milliseconds")
 
     # Update the item
     item = my_service_pb2.Item(id='1', name='Updated Item 1')
-    avg_update_time, _, _, update_bytes_transferred, update_time_spent = benchmark_operation(stub, update_item, item, iterations=iterations)
+    avg_update_time, _, _, update_bytes_transferred, update_time_spent = benchmark_operation(
+        stub, update_item, item, iterations=iterations)
     total_bytes_transferred += update_bytes_transferred
     total_time_spent += update_time_spent
     print(f"Average UpdateItem Time: {avg_update_time} milliseconds")
@@ -102,6 +113,7 @@ def run(iterations: int=ITER_NUMBER):
     print(f"Total Time Spent (seconds): {total_time_spent}")
     transfer_rate = total_bytes_transferred / total_time_spent
     print(f"Transfer Rate (bytes/second): {transfer_rate}")
+
 
 if __name__ == '__main__':
     typer.run(run)

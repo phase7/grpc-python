@@ -18,7 +18,7 @@ def run(iterations: int = ITER_NUMBER):
     total_bytes_transferred = 0
     total_time_spent = 0
 
-    # Perform CreateItem ITER_NUMBER times
+    # Perform CreateItem iterations
     total_create_time = 0
     for i in range(iterations):
         start = time.time()
@@ -35,7 +35,7 @@ def run(iterations: int = ITER_NUMBER):
     print('Average CreateItem Time:', avg_create_time, 'milliseconds')
     total_time_spent += total_create_time
 
-    # Perform GetItem ITER_NUMBER times
+    # Perform GetItem iterations
     total_get_time = 0
     for i in range(iterations):
         start = time.time()
@@ -51,7 +51,7 @@ def run(iterations: int = ITER_NUMBER):
     print('Average GetItem Time:', avg_get_time, 'milliseconds')
     total_time_spent += total_get_time
 
-    # Perform UpdateItem ITER_NUMBER times
+    # Perform UpdateItem iterations
     total_update_time = 0
     for i in range(iterations):
         start = time.time()
@@ -68,7 +68,7 @@ def run(iterations: int = ITER_NUMBER):
     print('Average UpdateItem Time:', avg_update_time, 'milliseconds')
     total_time_spent += total_update_time
 
-    # Perform DeleteItem ITER_NUMBER times
+    # Perform DeleteItem iterations
     total_delete_time = 0
     for i in range(iterations):
         start = time.time()
