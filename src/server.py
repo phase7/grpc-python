@@ -1,7 +1,6 @@
 import grpc
 from concurrent import futures
 import time
-import my_service_pb2
 import my_service_pb2_grpc
 
 class ItemServiceServicer(my_service_pb2_grpc.ItemServiceServicer):
