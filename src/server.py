@@ -1,10 +1,10 @@
 import grpc
 from concurrent import futures
 import time
-import myservice_pb2
-import myservice_pb2_grpc
+import my_service_pb2
+import my_service_pb2_grpc
 
-class ItemServiceServicer(myservice_pb2_grpc.ItemServiceServicer):
+class ItemServiceServicer(my_service_pb2_grpc.ItemServiceServicer):
     def __init__(self):
         self.items = {}
 
@@ -32,7 +32,7 @@ class ItemServiceServicer(myservice_pb2_grpc.ItemServiceServicer):
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    myservice_pb2_grpc.add_ItemServiceServicer_to_server(ItemServiceServicer(), server)
+    my_service_pb2_grpc.add_ItemServiceServicer_to_server(ItemServiceServicer(), server)
     server.add_insecure_port('[::]:50051')
     server.start()
     print("Server started on port 50051")
