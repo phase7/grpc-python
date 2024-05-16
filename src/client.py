@@ -3,28 +3,36 @@ import time
 import my_service_pb2
 import my_service_pb2_grpc
 
+ITER_NUMBER = 10000
+
+
 def benchmark_operation(stub, operation, *args):
-    start_time = time.time()
-    for _ in range(10000):
+    start_time = time.monotonic()
+    for _ in range(ITER_NUMBER):
         operation(stub, *args)
-    end_time = time.time()
-    return (end_time - start_time) * 1000 / 10000  # Convert seconds to milliseconds
+    end_time = time.monotonic()
+    return (end_time - start_time) / ITER_NUMBER *1000 # milliseconds
+
 
 def create_item(stub, item):
     response = stub.CreateItem(item)
     return response
 
+
 def get_item(stub, item_id):
     response = stub.GetItem(item_id)
     return response
+
 
 def update_item(stub, item):
     response = stub.UpdateItem(item)
     return response
 
+
 def delete_item(stub, item_id):
     response = stub.DeleteItem(item_id)
     return response
+
 
 def run():
     channel = grpc.insecure_channel('localhost:50051')
@@ -46,18 +54,20 @@ def run():
     print(f"Average UpdateItem Time: {avg_update_time} milliseconds")
 
     # Delete the item separately to ensure it exists before each deletion
-    def benchmark_delete_operation():
-        for _ in range(10000):
-            # Create item before deletion
-            create_item(stub, item)
-            # Delete item
-            delete_item(stub, item_id)
+    total_delete_time = 0
 
-    start_time = time.time()
-    benchmark_delete_operation()
-    end_time = time.time()
-    avg_delete_time = (end_time - start_time) * 1000 / 10000  # Convert seconds to milliseconds
+    for _ in range(ITER_NUMBER):
+        # Create item before deletion
+        create_item(stub, item)
+        start_time = time.monotonic()
+        # Delete item
+        delete_item(stub, item_id)
+        end_time = time.monotonic()
+        total_delete_time += (end_time - start_time)
+
+    avg_delete_time = total_delete_time / ITER_NUMBER * 1000 # milliseconds
     print(f"Average DeleteItem Time: {avg_delete_time} milliseconds")
+
 
 if __name__ == '__main__':
     run()
