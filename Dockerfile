@@ -1,6 +1,7 @@
 # Use an official Python runtime as a parent image
 FROM python:3.12.3-slim
 
+ENV PYTHONUNBUFFERED 1
 # Set the working directory in the container to /app
 WORKDIR /app
 
@@ -18,4 +19,4 @@ RUN poetry config virtualenvs.create false \
 EXPOSE 50051
 
 # Run server.py when the container launches
-CMD ["python", "src/server.py"]
+CMD ["scripts/docker-entrypoint.sh"]
