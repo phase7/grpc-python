@@ -13,6 +13,8 @@ grpcio = "^1.62.1"
 grpcio-tools = "^1.62.1"
 fastapi = {extras = ["all"], version = "^0.110.1"}
 typer = "^0.12.1"
+requests = "^2.31.0"
+flask = "^3.0.3"
 
 
 [build-system]
