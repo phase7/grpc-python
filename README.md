@@ -6,6 +6,6 @@
 
 # grpc-python (with docker)
 
-1. build image `docker build --no-cache -t data-guild-grpc .`
+1. build image `docker build -t data-guild-grpc .`
 2. run server with dummy db `docker run -it --rm -p 50051:50051 data-guild-grpc server`
 3. run benchmark client `docker run -it --rm --network="host" data-guild-grpc client --iterations 10000`
