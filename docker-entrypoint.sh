@@ -3,23 +3,19 @@ set -ex
 
 case $1 in
     server)
-        echo "initilizin database..."
-        exec python -u init_db.py
+        echo "initilizing database..."
+        python -u init_db.py
         # Shift arguments to the left so $1 now refers to the first argument after "run_publisher"
         shift
-        if [ $# -eq 0 ]; then
-          python -u server.py
-        else
-          python -u server.py "$@"
-        fi
+        python src/server.py
         ;;
     client)
         echo "init benchmarking..."
         shift
         if [ $# -eq 0 ]; then
-          python -u client.py --iterations 20
+          python -u src/client.py --iterations 20
         else
-          python -u client.py "$@"
+          python -u src/client.py "$@"
         fi
         ;;
     *)
