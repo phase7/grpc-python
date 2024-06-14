@@ -14,7 +14,11 @@ COPY pyproject.toml poetry.lock ./
 RUN poetry config virtualenvs.create false \
   && poetry install --no-interaction --no-ansi --no-root
 
-  
+COPY protos/my_service.proto .
+RUN mkdir -p "/app/src"
+# generate stub from proto files
+RUN python3 -m grpc_tools.protoc -I. --python_out=/app/src --grpc_python_out=/app/src ./my_service.proto
+
 COPY . .
 RUN chmod +x /app/docker-entrypoint.sh
 
