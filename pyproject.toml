@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "grpc-python"
-version = "0.1.1"
+version = "0.1.2"
 description = "try out grpc things"
 authors = ["ratulr <ratul.reach@outlook.com>"]
 license = "mpl-2.0"
